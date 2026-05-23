@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { useEffect } from "react";
+import emailjs from "@emailjs/browser";
 
 export default function Home() {
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const formRef = useRef();
+
     useEffect(() => {
         AOS.init({
             duration: 1000,
@@ -11,692 +14,483 @@ export default function Home() {
         });
     }, []);
 
-    return (
-        <>
-            <header id="header" className="header light-background d-flex flex-column">
-                <i className="header-toggle d-xl-none bi bi-list"></i>
+    const toggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen);
+    };
 
+    const sendEmail = (e) => {
+        e.preventDefault();
+
+        // Apne EmailJS dashboard se in teen id's ko replace karein
+        const serviceID = "service_tms53du";
+        const templateID = "template_dfqed3m";
+        const publicKey = "e5Dmi0rq7nmDzRoEf";
+
+        emailjs.sendForm(serviceID, templateID, formRef.current, publicKey)
+            .then((result) => {
+                alert("Thank you! Your message has been sent successfully. 👍");
+                formRef.current.reset(); // Form clear karne ke liye
+            }, (error) => {
+                console.error("EmailJS Error:", error);
+                alert("Oops! Something went wrong. Please try again. 👎");
+            });
+    };
+
+    return (
+        <div style={{ overflowX: "hidden", width: "100%", position: "relative" }}>
+
+            {/* Mobile Toggle Button */}
+            <button
+                onClick={toggleSidebar}
+                className="btn btn-info d-xl-none position-fixed"
+                style={{ top: "15px", right: "15px", zIndex: "1100", borderRadius: "50%", width: "45px", height: "45px", color: "white" }}
+            >
+                <i className={`bi ${isSidebarOpen ? 'bi-x-lg' : 'bi-list'} fs-5`}></i>
+            </button>
+
+            {/* Header / Sidebar Component */}
+            <header
+                id="header"
+                className="header d-flex flex-column"
+                style={{
+                    background: "linear-gradient(180deg, #0f2027, #203a43, #2c5364)",
+                    height: "100vh",
+                    position: "fixed",
+                    top: "0",
+                    left: "0",
+                    width: "300px",
+                    zIndex: "1000",
+                    transition: "all 0.3s ease",
+                    transform: "translateX(0)"
+                }}
+            >
                 <div className="profile-img d-flex align-items-center justify-content-center mt-4">
                     <div
                         style={{
-                            width: "120px",
-                            height: "120px",
+                            width: "100px",
+                            height: "100px",
                             borderRadius: "50%",
-                            backgroundColor: "#149ddd",
-                            color: "white",
+                            backgroundColor: "rgba(255, 255, 255, 0.1)",
+                            color: "#00d4ff",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
-                            fontSize: "48px",
-                            fontWeight: "bold"
+                            fontSize: "36px",
+                            fontWeight: "bold",
+                            border: "2px solid #00d4ff",
+                            boxShadow: "0px 0px 15px rgba(0, 212, 255, 0.3)"
                         }}
                     >
                         A
                     </div>
                 </div>
 
-                <a href="#hero" className="logo d-flex align-items-center justify-content-center">
-                    <h1 className="sitename">Aarti Saini</h1>
+                <a href="#hero" className="logo d-flex align-items-center justify-content-center text-decoration-none mt-2">
+                    <h1 className="sitename text-white m-0" style={{ fontSize: "24px", fontWeight: "600" }}>Aarti Saini</h1>
                 </a>
 
-                <div className="social-links text-center">
-                    <a href="#" className="twitter"><i className="bi bi-twitter-x"></i></a>
-                    <a href="#" className="facebook"><i className="bi bi-facebook"></i></a>
-                    <a href="#" className="instagram"><i className="bi bi-instagram"></i></a>
-                    <a href="#" className="google-plus"><i className="bi bi-skype"></i></a>
-                    <a href="#" className="linkedin"><i className="bi bi-linkedin"></i></a>
+                <div className="social-links text-center my-3">
+                    <a
+                        href="https://t.me/your_username"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="telegram mx-1 text-white opacity-75"
+                    >
+                        <i className="bi bi-telegram"></i>
+                    </a>
+                    <a href="#" className="facebook mx-1 text-white opacity-75"><i className="bi bi-facebook"></i></a>
+                    <a href="#" className="instagram mx-1 text-white opacity-75"><i className="bi bi-instagram"></i></a>
+                    <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="linkedin mx-1 text-white opacity-75"><i className="bi bi-linkedin"></i></a>
                 </div>
 
-                <nav id="navmenu" className="navmenu">
-                    <ul>
-                        <li><a href="#hero" className="active"><i className="bi bi-house navicon"></i>Home</a></li>
-                        <li><a href="#about"><i className="bi bi-person navicon"></i> About</a></li>
-                        <li><a href="#resume"><i className="bi bi-file-earmark-text navicon"></i> Resume</a></li>
-                        <li><a href="#portfolio"><i className="bi bi-images navicon"></i> Portfolio</a></li>
-                        <li><a href="#services"><i className="bi bi-hdd-stack navicon"></i> Services</a></li>
-                        <li className="dropdown"><a href="#"><i className="bi bi-menu-button navicon"></i> <span>Dropdown</span> <i className="bi bi-chevron-down toggle-dropdown"></i></a>
-                            <ul>
-                                <li><a href="#">Dropdown 1</a></li>
-                                <li className="dropdown"><a href="#"><span>Deep Dropdown</span> <i className="bi bi-chevron-down toggle-dropdown"></i></a>
-                                    <ul>
-                                        <li><a href="#">Deep Dropdown 1</a></li>
-                                        <li><a href="#">Deep Dropdown 2</a></li>
-                                        <li><a href="#">Deep Dropdown 3</a></li>
-                                        <li><a href="#">Deep Dropdown 4</a></li>
-                                        <li><a href="#">Deep Dropdown 5</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">Dropdown 2</a></li>
-                                <li><a href="#">Dropdown 3</a></li>
-                                <li><a href="#">Dropdown 4</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#contact"><i className="bi bi-envelope navicon"></i> Contact</a></li>
+                <nav id="navmenu" className="navmenu w-100 px-3 overflow-y-auto">
+                    <ul className="list-unstyled">
+                        <li className="mb-2"><a href="#hero" className="nav-link text-white active py-2 d-flex align-items-center" onClick={() => setIsSidebarOpen(false)}><i className="bi bi-house navicon me-2 text-info"></i> Home</a></li>
+                        <li className="mb-2"><a href="#about" className="nav-link text-white opacity-75 py-2 d-flex align-items-center" onClick={() => setIsSidebarOpen(false)}><i className="bi bi-person navicon me-2"></i> About</a></li>
+                        <li className="mb-2"><a href="#skills" className="nav-link text-white opacity-75 py-2 d-flex align-items-center" onClick={() => setIsSidebarOpen(false)}><i className="bi bi-code-slash navicon me-2"></i> Skills</a></li>
+                        <li className="mb-2"><a href="#resume" className="nav-link text-white opacity-75 py-2 d-flex align-items-center" onClick={() => setIsSidebarOpen(false)}><i className="bi bi-file-earmark-text navicon me-2"></i> Resume</a></li>
+                        <li className="mb-2"><a href="#services" className="nav-link text-white opacity-75 py-2 d-flex align-items-center" onClick={() => setIsSidebarOpen(false)}><i className="bi bi-hdd-stack navicon me-2"></i> Services</a></li>
+                        <li className="mb-2"><a href="#contact" className="nav-link text-white opacity-75 py-2 d-flex align-items-center" onClick={() => setIsSidebarOpen(false)}><i className="bi bi-envelope navicon me-2"></i> Contact</a></li>
                     </ul>
                 </nav>
-
             </header>
 
+            {/* Style hacks to strictly ensure zero-scroll and clean padding rules */}
+            <style>{`
+                * {
+                    box-sizing: border-box !important;
+                }
+                .main-content-panel {
+                    margin-left: 300px; 
+                    width: calc(100% - 300px);
+                    transition: all 0.3s ease;
+                    overflow-x: hidden;
+                }
+                .section-wrapper {
+                    padding: 60px 15px;
+                    width: 100%;
+                    overflow-x: hidden;
+                }
+                .row {
+                    margin-right: 0 !important;
+                    margin-left: 0 !important;
+                }
+                @media (max-width: 1199px) {
+                    #header {
+                        transform: ${isSidebarOpen ? "translateX(0)" : "translateX(-100%)"} !important;
+                    }
+                    .main-content-panel {
+                        margin-left: 0px !important;
+                        width: 100% !important;
+                    }
+                }
+                .img-hero-circle {
+                    width: 280px;
+                    height: 280px;
+                }
+                @media (max-width: 576px) {
+                    .img-hero-circle {
+                        width: 210px;
+                        height: 210px;
+                    }
+                }
+            `}</style>
 
-            <main className="main">
+            {/* Main Content Layout Container */}
+            <main className="main main-content-panel">
 
-
+                {/* Hero Section */}
                 <section
                     id="hero"
                     style={{
-                        minHeight: "50vh",
+                        minHeight: "75vh", // Height ko 90vh se 75vh kiya taaki un-necessary extra space khatam ho
                         background: "linear-gradient(135deg, #0f2027, #203a43, #2c5364)",
                         display: "flex",
                         alignItems: "center",
                         color: "white",
+                        padding: "40px 15px" // Top padding ko 80px se ghatakar 40px kiya taaki content upar move ho sake
                     }}
                 >
-                    <div className="container">
-                        <div className="row align-items-center">
+                    <div className="container-fluid p-0">
+                        <div className="row align-items-center gy-4 m-0"> {/* gy-5 ko gy-4 kiya taaki internal spacing compact ho */}
+                            <div className="col-lg-7 p-0" data-aos="fade-right">
 
-                            {/* Left Content */}
-                            <div className="col-lg-7">
-                                <h1 style={{ fontSize: "48px", fontWeight: "700", color: 'white' }}>
+                                {/* Available for New Projects badge */}
+                                <div className="d-inline-flex align-items-center mb-3 px-3 py-1 rounded-pill" style={{ background: "rgba(0, 212, 255, 0.1)", border: "1px solid rgba(0, 212, 255, 0.3)" }}>
+                                    <span className="p-1 bg-success rounded-circle me-2" style={{ width: "8px", height: "8px", display: "inline-block" }}></span>
+                                    <small style={{ color: "#00d4ff", fontWeight: "500", letterSpacing: "0.5px" }}>Available for New Projects</small>
+                                </div>
+
+                                <h1 className="fw-bold" style={{ fontSize: "calc(1.8rem + 2vw)", color: 'white', lineHeight: "1.2" }}>
                                     Hi, I'm <span style={{ color: "#00d4ff" }}>Aarti Saini</span>
                                 </h1>
 
-                                <h3 style={{ marginTop: "15px", fontWeight: "400", color: 'white' }}>
-                                    React JS & React Native Developer
+                                <h3 className="fw-normal mt-2" style={{ color: '#a0aec0', fontSize: "calc(1.1rem + 0.5vw)" }}>
+                                    Building Seamless Web & Mobile Experiences
                                 </h3>
 
-                                <p style={{ marginTop: "20px", maxWidth: "500px" }}>
-                                    I build responsive web and mobile applications with modern UI,
-                                    performance optimization, and scalable backend integration.
+                                <p className="mt-3" style={{ maxWidth: "550px", color: "#e2e8f0", lineHeight: "1.7", fontSize: "15px" }}>
+                                    I specialize in engineering high-performance interfaces, reproducing complex pixel-perfect modular architectures, and crafting standard cross-platform components.
                                 </p>
 
-                                <div style={{ marginTop: "30px" }}>
-                                    <a
-                                        href="#contact"
-                                        className="btn btn-info me-3"
-                                    >
-                                        Hire Me
-                                    </a>
+                                {/* Main Stack Badges */}
+                                <div className="mt-4 d-flex flex-wrap gap-2 align-items-center">
+                                    <span className="text-white-50 small fw-semibold me-2">Main Stack:</span>
+                                    {["React.js", "React Native", "JavaScript", "Tailwind CSS", "Bootstrap"].map((tech, idx) => (
+                                        <span
+                                            key={idx}
+                                            className="badge px-3 py-2 text-white"
+                                            style={{
+                                                backgroundColor: "rgba(255,255,255,0.06)",
+                                                border: "1px solid rgba(255,255,255,0.1)",
+                                                borderRadius: "6px",
+                                                fontSize: "12px",
+                                                fontWeight: "500"
+                                            }}
+                                        >
+                                            {tech}
+                                        </span>
+                                    ))}
+                                </div>
 
-                                    <a
-                                        href="#portfolio"
-                                        className="btn btn-outline-light"
-                                    >
-                                        View Projects
+                                {/* Buttons */}
+                                <div className="mt-4 d-flex flex-wrap gap-3">
+                                    <a href="#contact" className="btn btn-info text-white px-4 py-2.5 fw-semibold shadow-sm rounded-3">
+                                        <i className="bi bi-envelope-fill me-2"></i>Hire Me
+                                    </a>
+                                    <a href="/assets/aartisainiresume.pdf" download className="btn btn-outline-light px-4 py-2.5 fw-semibold rounded-3">
+                                        <i className="bi bi-download me-2"></i>Download CV
                                     </a>
                                 </div>
                             </div>
 
-                            {/* Right Side Design Circle */}
-                            <div className="col-lg-5 text-center">
-                                <div
-                                    style={{
-                                        width: "250px",
-                                        height: "250px",
-                                        borderRadius: "50%",
-                                        overflow: "hidden",
-                                        margin: "auto",
-                                        border: "5px solid rgba(255,255,255,0.2)",
-                                        boxShadow: "0 10px 30px rgba(0,0,0,0.4)"
-                                    }}
-                                >
-                                    <img
-                                        src="/assets/img/hero.jpg"
-                                        alt="Aarti Saini"
-                                        style={{
-                                            width: "100%",
-                                            height: "100%",
-                                            objectFit: "cover"
-                                        }}
-                                    />
+                            {/* Right Side Metric Cards Grid */}
+                            <div className="col-lg-5 p-0" data-aos="fade-left">
+                                <div className="row g-3 m-0 justify-content-center">
+                                    {[
+                                        { number: "35+", label: "ERP & UI Modules Built", color: "#00d4ff", icon: "bi-layers" },
+                                        { number: "100%", label: "Responsive Fluid Grid", color: "#50fa7b", icon: "bi-phone-vibrate" },
+                                        { number: "10+", label: "Integrated Custom APIs", color: "#ffb86c", icon: "bi-cpu" },
+                                        { number: "0", label: "Horizontal Layout Scroll", color: "#ff5555", icon: "bi-check-circle" }
+                                    ].map((item, idx) => (
+                                        <div className="col-sm-6 p-2" key={idx}>
+                                            <div
+                                                className="p-4 h-100 text-start"
+                                                style={{
+                                                    background: "rgba(255, 255, 255, 0.03)",
+                                                    border: "1px solid rgba(255, 255, 255, 0.08)",
+                                                    borderRadius: "12px",
+                                                    boxShadow: "0 10px 20px rgba(0,0,0,0.2)"
+                                                }}
+                                            >
+                                                <div className="fs-3 mb-2" style={{ color: item.color }}><i className={`bi ${item.icon}`}></i></div>
+                                                <h3 className="fw-bold text-white mb-1">{item.number}</h3>
+                                                <p className="text-white-50 m-0 small" style={{ lineHeight: "1.4" }}>{item.label}</p>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </section>
 
-
-                <section id="about" className="about section">
-
-                    <div className="container section-title" data-aos="fade-up">
-                        <h2>About</h2>
-                        <p>
-                            Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem.
-                        </p>
-                    </div>
-
-                    <div className="container" data-aos="fade-up" data-aos-delay="100">
-
-                        <div className="row gy-4 justify-content-center align-items-center">
-
-                            {/* Profile Image */}
-                            <div className="col-lg-4 text-center">
-                                <div
-                                    style={{
-                                        width: "350px",
-                                        height: "350px",
-                                        // borderRadius: "50%",
-                                        overflow: "hidden",
-                                        margin: "auto",
-                                        border: "5px solid #0d6efd",
-                                        boxShadow: "0 10px 25px rgba(0,0,0,0.2)"
-                                    }}
-                                >
-                                    <img
-                                        src="/assets/img/hero.jpg"
-                                        alt="Aarti Saini"
-                                        style={{
-                                            width: "100%",
-                                            height: "100%",
-                                            objectFit: "cover"
-                                        }}
-                                    />
+                {/* About Section */}
+                <section id="about" className="about section-wrapper bg-white">
+                    <div className="container-fluid p-0" data-aos="fade-up">
+                        <div className="border-start border-4 border-info ps-3 mb-4">
+                            <h2 className="fw-bold m-0">About Me</h2>
+                        </div>
+                        <div className="row gy-4 align-items-center mt-2 m-0">
+                            <div className="col-lg-4 text-center p-0" data-aos="fade-right" data-aos-delay="100">
+                                <div style={{ maxWidth: "300px", margin: "auto", borderRadius: "12px", overflow: "hidden", boxShadow: "0 10px 30px rgba(0,0,0,0.1)" }}>
+                                    <img src="/assets/img/hero.jpg" alt="Aarti Saini" className="img-fluid w-100" style={{ objectFit: "cover" }} />
                                 </div>
                             </div>
 
-                            {/* Content */}
-                            <div className="col-lg-8 content">
-                                <h2>Frontend Developer & UI/UX Designer</h2>
-
-                                <p className="fst-italic py-3">
-                                    Passionate frontend developer with 1 year of experience in building responsive and user-friendly web applications using React and Bootstrap.
+                            <div className="col-lg-8 content p-0 ps-lg-4" data-aos="fade-left" data-aos-delay="100">
+                                <h3 className="text-secondary fw-semibold">Frontend Developer & UI/UX Specialist</h3>
+                                <p className="fst-italic text-muted py-2">
+                                    Passionate engineer focused on transforming complex design blueprints into pixel-perfect, clean, and interactive dashboards.
                                 </p>
-
-                                <div className="row">
-                                    <div className="col-lg-6">
-                                        <ul>
-                                            <li>
-                                                <i className="bi bi-chevron-right"></i>
-                                                <strong>Birthday:</strong> <span>1 july 2005</span>
-                                            </li>
-                                            <li>
-                                                <i className="bi bi-chevron-right"></i>
-                                                <strong>City:</strong> <span>Rajasthan, India</span>
-                                            </li>
-                                            <li>
-                                                <i className="bi bi-chevron-right"></i>
-                                                <strong>Experience:</strong> <span>1 Year</span>
-                                            </li>
+                                <div className="row mt-3 gy-2 m-0">
+                                    <div className="col-sm-6 p-0">
+                                        <ul className="list-unstyled mb-0">
+                                            <li className="mb-2"><i className="bi bi-chevron-right text-info me-2"></i><strong>Location:</strong> <span>Jaipur, Rajasthan, India</span></li>
+                                            <li className="mb-2"><i className="bi bi-chevron-right text-info me-2"></i><strong>Experience:</strong> <span>1+ Year Professional</span></li>
+                                        </ul>
+                                    </div>
+                                    <div className="col-sm-6 p-0">
+                                        <ul className="list-unstyled mb-0">
+                                            <li className="mb-2"><i className="bi bi-chevron-right text-info me-2"></i><strong>Degree:</strong> <span>MCA (Pursuing)</span></li>
+                                            <li className="mb-2"><i className="bi bi-chevron-right text-info me-2"></i><strong>Email:</strong> <span className="text-break">sainiaarti743@gmail.com</span></li>
                                         </ul>
                                     </div>
                                 </div>
-
-                                <p className="py-3">
-                                    I love creating clean UI designs and interactive web experiences. My goal is to continuously improve my skills and build impactful digital products.
+                                <p className="mt-3 mb-0">
+                                    I specialize in building customized enterprise systems like School Management tools, ERP interfaces, and billing solutions. My core emphasis is on lightweight layout responsiveness and standardized modular architecture.
                                 </p>
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </section>
 
-
-
-                <section id="stats" className="stats section py-5 bg-light">
-
-                    <div className="container">
-
-                        <div className="row gy-4 text-center">
-
-                            {/* Clients */}
-                            <div className="col-lg-3 col-md-6">
-                                <div className="p-4 shadow-sm rounded bg-white h-100">
-                                    <i className="bi bi-emoji-smile fs-1 text-primary"></i>
-                                    <h2 className="mt-3 fw-bold">20+</h2>
-                                    <p className="mb-0">Happy Clients</p>
+                {/* Stats Section */}
+                <section id="stats" className="stats section-wrapper bg-light">
+                    <div className="container-fluid p-0">
+                        <div className="row gy-4 text-center m-0">
+                            {[
+                                { icon: "bi-emoji-smile text-primary", count: "20+", title: "Happy Clients" },
+                                { icon: "bi-journal-richtext text-success", count: "35+", title: "Projects Completed" },
+                                { icon: "bi-code-slash text-danger", count: "1+ Year", title: "Experience" },
+                                { icon: "bi-layers text-warning", count: "10+", title: "Tech Frameworks" }
+                            ].map((stat, idx) => (
+                                <div className="col-sm-6 col-lg-3 px-2" key={idx} data-aos="zoom-in" data-aos-delay={idx * 100}>
+                                    <div className="p-4 shadow-sm rounded border-0 bg-white h-100">
+                                        <i className={`bi ${stat.icon} fs-1`}></i>
+                                        <h3 className="mt-2 fw-bold text-dark mb-1">{stat.count}</h3>
+                                        <p className="mb-0 text-muted small text-uppercase fw-semibold">{stat.title}</p>
+                                    </div>
                                 </div>
-                            </div>
-
-                            {/* Projects */}
-                            <div className="col-lg-3 col-md-6">
-                                <div className="p-4 shadow-sm rounded bg-white h-100">
-                                    <i className="bi bi-journal-richtext fs-1 text-success"></i>
-                                    <h2 className="mt-3 fw-bold">35+</h2>
-                                    <p className="mb-0">Projects Completed</p>
-                                </div>
-                            </div>
-
-                            {/* Experience */}
-                            <div className="col-lg-3 col-md-6">
-                                <div className="p-4 shadow-sm rounded bg-white h-100">
-                                    <i className="bi bi-code-slash fs-1 text-danger"></i>
-                                    <h2 className="mt-3 fw-bold">1+</h2>
-                                    <p className="mb-0">Years Experience</p>
-                                </div>
-                            </div>
-
-                            {/* Skills */}
-                            <div className="col-lg-3 col-md-6">
-                                <div className="p-4 shadow-sm rounded bg-white h-100">
-                                    <i className="bi bi-people fs-1 text-warning"></i>
-                                    <h2 className="mt-3 fw-bold">10+</h2>
-                                    <p className="mb-0">Technologies Known</p>
-                                </div>
-                            </div>
-
+                            ))}
                         </div>
-
                     </div>
-
                 </section>
 
-
-                <section id="skills" className="skills section py-5 bg-light">
-
-                    <div className="container">
-                        <div className="text-center mb-5">
-                            <h2 className="fw-bold">My Skills</h2>
-                            <p className="text-muted">
-                                Technologies and tools I work with to build modern web applications.
-                            </p>
+                {/* Skills Section */}
+                <section id="skills" className="skills section-wrapper bg-white">
+                    <div className="container-fluid p-0" data-aos="fade-up">
+                        <div className="border-start border-4 border-success ps-3 mb-5">
+                            <h2 className="fw-bold m-0">Technical Expertise</h2>
                         </div>
-
-                        <div className="row">
-
-                            {/* Left Column */}
-                            <div className="col-lg-6">
-
+                        <div className="row gy-4 m-0">
+                            <div className="col-md-6 px-2 pe-md-4">
                                 {[
-                                    { name: "HTML", value: 95 },
-                                    { name: "CSS", value: 90 },
-                                    { name: "JavaScript", value: 80 },
-                                    { name: "MongoDB", value: 60 }
+                                    { name: "React.js", value: 90, color: "bg-primary" },
+                                    { name: "React Native (CLI)", value: 85, color: "bg-info" },
+                                    { name: "JavaScript (ES6+)", value: 80, color: "bg-warning" },
+                                    { name: "Tailwind CSS / Bootstrap", value: 90, color: "bg-dark" }
                                 ].map((skill, index) => (
                                     <div className="mb-4" key={index}>
-                                        <div className="d-flex justify-content-between">
-                                            <span className="fw-semibold">{skill.name}</span>
-                                            <span>{skill.value}%</span>
+                                        <div className="d-flex justify-content-between mb-1">
+                                            <span className="fw-semibold text-secondary">{skill.name}</span>
+                                            <span className="text-muted small">{skill.value}%</span>
                                         </div>
-                                        <div className="progress" style={{ height: "8px" }}>
-                                            <div
-                                                className="progress-bar bg-primary"
-                                                role="progressbar"
-                                                style={{ width: `${skill.value}%` }}
-                                            ></div>
+                                        <div className="progress" style={{ height: "6px", borderRadius: "10px" }}>
+                                            <div className={`progress-bar ${skill.color}`} role="progressbar" style={{ width: `${skill.value}%`, borderRadius: "10px" }}></div>
                                         </div>
                                     </div>
                                 ))}
-
                             </div>
 
-                            {/* Right Column */}
-                            <div className="col-lg-6">
-
+                            <div className="col-md-6 px-2 ps-md-4">
                                 {[
-                                    { name: "Bootstrap", value: 85 },
-                                    { name: "React JS", value: 90 },
-                                    { name: "React Native", value: 85 },
-                                    { name: "Node JS", value: 70 }
+                                    { name: "HTML5 / CSS3", value: 95, color: "bg-success" },
+                                    { name: "REST API Integration", value: 85, color: "bg-secondary" },
+                                    { name: "MongoDB Database", value: 70, color: "bg-info" },
+                                    { name: "Version Control (Git)", value: 85, color: "bg-danger" }
                                 ].map((skill, index) => (
                                     <div className="mb-4" key={index}>
-                                        <div className="d-flex justify-content-between">
-                                            <span className="fw-semibold">{skill.name}</span>
-                                            <span>{skill.value}%</span>
+                                        <div className="d-flex justify-content-between mb-1">
+                                            <span className="fw-semibold text-secondary">{skill.name}</span>
+                                            <span className="text-muted small">{skill.value}%</span>
                                         </div>
-                                        <div className="progress" style={{ height: "8px" }}>
-                                            <div
-                                                className="progress-bar bg-success"
-                                                role="progressbar"
-                                                style={{ width: `${skill.value}%` }}
-                                            ></div>
+                                        <div className="progress" style={{ height: "6px", borderRadius: "10px" }}>
+                                            <div className={`progress-bar ${skill.color}`} role="progressbar" style={{ width: `${skill.value}%`, borderRadius: "10px" }}></div>
                                         </div>
                                     </div>
                                 ))}
-
                             </div>
-
                         </div>
                     </div>
-
                 </section>
 
-
-                <section id="resume" className="resume section">
-
-                    <div className="container section-title">
-                        <h2>Resume</h2>
-                        <p>
-                            Passionate React JS & React Native Developer with 1 year of experience
-                            building responsive web and mobile applications.
-                        </p>
-                    </div>
-
-                    <div className="container">
-                        <div className="row">
-
-                            {/* Left Column */}
-                            <div className="col-lg-6">
-
-                                <h3 className="resume-title">Career Objective</h3>
-                                <div className="resume-item pb-0">
-                                    <p>
-                                        Passionate Web Designer and Frontend Developer with 1 year of experience
-                                        at ARJ Technology. Skilled in HTML, CSS, JavaScript, React.js, and React Native.
-                                        Focused on building responsive, user-friendly interfaces and continuously
-                                        learning modern web technologies.
-                                    </p>
+                {/* Resume Section */}
+                <section id="resume" className="resume section-wrapper bg-light">
+                    <div className="container-fluid p-0" data-aos="fade-up">
+                        <div className="border-start border-4 border-primary ps-3 mb-5">
+                            <h2 className="fw-bold m-0">Professional Resume</h2>
+                        </div>
+                        <div className="row gy-4 m-0">
+                            <div className="col-lg-6 px-2 pe-lg-4">
+                                <h4 className="text-primary fw-bold mb-4"><i className="bi bi-mortarboard-fill me-2"></i> Education</h4>
+                                <div className="ps-3 border-start border-2 border-primary position-relative mb-4">
+                                    <h5 className="fw-bold mb-1 text-dark">Master of Computer Applications (MCA)</h5>
+                                    <span className="badge bg-primary mb-2">2025 - 2026</span>
+                                    <p className="text-muted small mb-0"><em>Suresh Gyan Vihar University, Jaipur</em></p>
                                 </div>
-
-                                <h3 className="resume-title">Education</h3>
-
-                                <div className="resume-item">
-                                    <h4>M.C.A.</h4>
-                                    <h5>2026</h5>
-                                    <p><em>Suresh Gyan Vihar University, Jaipur</em></p>
+                                <div className="ps-3 border-start border-2 border-primary position-relative mb-4">
+                                    <h5 className="fw-bold mb-1 text-dark">Bachelor of Science (B.Sc.)</h5>
+                                    <span className="badge bg-primary mb-2">2023 - 2025</span>
+                                    <p className="text-muted small mb-0"><em>Shekhawati University, Sikar</em></p>
                                 </div>
-
-                                <div className="resume-item">
-                                    <h4>B.Sc.</h4>
-                                    <h5>2025</h5>
-                                    <p><em>Shekhawati University, Sikar</em></p>
-                                </div>
-
-                                <div className="resume-item">
-                                    <h4>12th RBSE</h4>
-                                    <h5>2022</h5>
-                                    <p><em>Government Senior Secondary School, Ajitgarh</em></p>
-                                </div>
-
-                                <div className="resume-item">
-                                    <h4>10th RBSE</h4>
-                                    <h5>2020</h5>
-                                    <p><em>Government Senior Secondary School, Mangrah</em></p>
-                                </div>
-
                             </div>
 
-                            {/* Right Column */}
-                            <div className="col-lg-6">
-
-                                <h3 className="resume-title">Work Experience</h3>
-
-                                <div className="resume-item">
-                                    <h4>React JS & React Native Developer</h4>
-                                    <h5>Jan 2025 - Present</h5>
-                                    <p><em>ARJ Technology</em></p>
-                                    <ul>
-                                        <li>Developing responsive web applications using React.js.</li>
-                                        <li>Building cross-platform mobile apps using React Native.</li>
-                                        <li>Implementing modern UI with Tailwind CSS and Bootstrap.</li>
-                                        <li>Working with REST APIs, JWT authentication, and MongoDB.</li>
+                            <div className="col-lg-6 px-2 ps-lg-4">
+                                <h4 className="text-success fw-bold mb-4"><i className="bi bi-briefcase-fill me-2"></i> Experience & Projects</h4>
+                                <div className="ps-3 border-start border-2 border-success position-relative mb-4">
+                                    <h5 className="fw-bold mb-1 text-dark">React JS & React Native Developer</h5>
+                                    <span className="badge bg-success mb-2">Jan 2025 - Present</span>
+                                    <p className="text-muted small mb-1"><em>ARJ Technology, Jaipur</em></p>
+                                    <ul className="small text-muted ps-3 mb-0">
+                                        <li>Developing management dashboards (Visitor Lists, Exam Groups, Billings).</li>
+                                        <li>Building layout architectures using optimized React Functional Hooks.</li>
+                                        <li>Integrated customized workflows with REST APIs & Secure Token flows.</li>
                                     </ul>
                                 </div>
-
-                                <h3 className="resume-title">Technical Skills</h3>
-                                <div className="resume-item">
-                                    <ul>
-                                        <li><strong>Frontend:</strong> React.js, HTML, CSS, Tailwind CSS, Bootstrap, React Native</li>
-                                        <li><strong>Backend:</strong> Basic Node.js, Express.js, REST API, JWT</li>
-                                        <li><strong>Database:</strong> MongoDB, MongoDB Atlas, MongoDB Compass</li>
-                                        <li><strong>Programming:</strong> JavaScript</li>
-                                        <li><strong>Tools:</strong> Git, VS Code</li>
-                                        <li><strong>OS:</strong> Windows, macOS, Linux</li>
-                                    </ul>
-                                </div>
-
-                                <h3 className="resume-title">Projects</h3>
-                                <div className="resume-item">
-                                    <ul>
-                                        <li>School Management Application</li>
-                                        <li>Sales Management Application</li>
-                                        <li>Billing Application</li>
-                                        <li>Advisor Management Application</li>
-                                    </ul>
-                                </div>
-
-                                <h3 className="resume-title">Personal Attributes</h3>
-                                <div className="resume-item">
-                                    <ul>
-                                        <li>Hardworking with positive attitude</li>
-                                        <li>Strong interpersonal and leadership skills</li>
-                                        <li>Quick learner with growth mindset</li>
-                                        <li>Good communication (English & Hindi)</li>
-                                    </ul>
-                                </div>
-
                             </div>
-
                         </div>
                     </div>
-
                 </section>
 
-
-
-                <section id="services" className="services section">
-
-                    <div className="container section-title">
-                        <h2>Services</h2>
-                        <p>
-                            I provide modern web and mobile application development services
-                            focused on performance, scalability, and user experience.
-                        </p>
-                    </div>
-
-                    <div className="container">
-                        <div className="row gy-4">
-
-
-                            <div className="col-lg-4 col-md-6 service-item d-flex">
-                                <div className="icon flex-shrink-0">
-                                    <i className="bi bi-code-slash"></i>
+                {/* Services Section */}
+                <section id="services" className="services section-wrapper bg-white">
+                    <div className="container-fluid p-0" data-aos="fade-up">
+                        <div className="border-start border-4 border-info ps-3 mb-5">
+                            <h2 className="fw-bold m-0">Services</h2>
+                        </div>
+                        <div className="row gy-4 m-0">
+                            {[
+                                { icon: "bi-code-slash text-primary", title: "Frontend Web Apps", desc: "Building modular, robust, and clean ERP systems using React.js and modern UI frameworks." },
+                                { icon: "bi-phone text-info", title: "Cross-Platform Apps", desc: "Developing production-grade standard mobile interfaces using React Native CLI workflows." },
+                                { icon: "bi-server text-success", title: "Backend API Sync", desc: "Connecting lightweight custom asynchronous endpoints securely with client systems." },
+                                { icon: "bi-palette text-warning", title: "Screen to Code UI", desc: "Transforming design snapshots and blueprints into absolute pixel-perfect structures." }
+                            ].map((srv, idx) => (
+                                <div className="col-sm-6 col-lg-3 px-2" key={idx} data-aos="fade-up" data-aos-delay={idx * 100}>
+                                    <div className="p-4 rounded border h-100 shadow-sm bg-white text-center">
+                                        <div className="mb-3"><i className={`bi ${srv.icon} fs-2`}></i></div>
+                                        <h5 className="fw-bold mb-2 text-dark" style={{ fontSize: "16px" }}>{srv.title}</h5>
+                                        <p className="text-muted small mb-0">{srv.desc}</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h4 className="title">Frontend Development</h4>
-                                    <p className="description">
-                                        Building responsive and modern websites using React.js, HTML, CSS, Tailwind CSS, and Bootstrap.
-                                    </p>
-                                </div>
-                            </div>
-
-
-                            <div className="col-lg-4 col-md-6 service-item d-flex">
-                                <div className="icon flex-shrink-0">
-                                    <i className="bi bi-phone"></i>
-                                </div>
-                                <div>
-                                    <h4 className="title">Mobile App Development</h4>
-                                    <p className="description">
-                                        Developing cross-platform mobile applications using React Native with smooth UI and performance.
-                                    </p>
-                                </div>
-                            </div>
-
-
-                            <div className="col-lg-4 col-md-6 service-item d-flex">
-                                <div className="icon flex-shrink-0">
-                                    <i className="bi bi-server"></i>
-                                </div>
-                                <div>
-                                    <h4 className="title">Backend Integration</h4>
-                                    <p className="description">
-                                        REST API integration using Node.js, Express, JWT authentication and MongoDB database.
-                                    </p>
-                                </div>
-                            </div>
-
-
-                            <div className="col-lg-4 col-md-6 service-item d-flex">
-                                <div className="icon flex-shrink-0">
-                                    <i className="bi bi-database"></i>
-                                </div>
-                                <div>
-                                    <h4 className="title">Database Management</h4>
-                                    <p className="description">
-                                        Designing and managing databases using MongoDB, MongoDB Atlas and Compass.
-                                    </p>
-                                </div>
-                            </div>
-
-
-                            <div className="col-lg-4 col-md-6 service-item d-flex">
-                                <div className="icon flex-shrink-0">
-                                    <i className="bi bi-palette"></i>
-                                </div>
-                                <div>
-                                    <h4 className="title">UI/UX Implementation</h4>
-                                    <p className="description">
-                                        Creating clean, user-friendly and responsive interfaces focused on best user experience.
-                                    </p>
-                                </div>
-                            </div>
-
-
-                            <div className="col-lg-4 col-md-6 service-item d-flex">
-                                <div className="icon flex-shrink-0">
-                                    <i className="bi bi-git"></i>
-                                </div>
-                                <div>
-                                    <h4 className="title">Version Control & Deployment</h4>
-                                    <p className="description">
-                                        Managing projects using Git and deploying applications efficiently.
-                                    </p>
-                                </div>
-                            </div>
-
+                            ))}
                         </div>
                     </div>
-
                 </section>
 
-
-                <section id="contact" className="contact section">
-
-
-                    <div className="container section-title" data-aos="fade-up">
-                        <h2>Contact</h2>
-                        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
-                    </div>
-
-                    <div className="container" data-aos="fade-up" data-aos-delay="100">
-
-                        <div className="row gy-4">
-
-                            <div className="col-lg-5">
-
-                                <div className="info-wrap">
-                                    <div className="info-item d-flex" data-aos="fade-up" data-aos-delay="200">
-                                        <i className="bi bi-geo-alt flex-shrink-0"></i>
+                {/* Contact Section */}
+                <section id="contact" className="contact section-wrapper bg-light">
+                    <div className="container-fluid p-0" data-aos="fade-up">
+                        <div className="border-start border-4 border-danger ps-3 mb-5">
+                            <h2 className="fw-bold m-0">Contact</h2>
+                        </div>
+                        <div className="row gy-4 m-0">
+                            <div className="col-lg-5 px-2">
+                                <div className="p-4 bg-white rounded shadow-sm h-100">
+                                    <div className="d-flex align-items-start mb-4">
+                                        <i className="bi bi-geo-alt text-danger fs-4 me-3"></i>
                                         <div>
-                                            <h3>Address</h3>
-                                            <p>Ajitgarh Nimkathana Sikar Rajasthan 332701</p>
+                                            <h5 className="fw-bold mb-1">Location</h5>
+                                            <p className="text-muted small mb-0">Jaipur, Rajasthan, India</p>
                                         </div>
                                     </div>
-
-                                    <div className="info-item d-flex" data-aos="fade-up" data-aos-delay="300">
-                                        <i className="bi bi-telephone flex-shrink-0"></i>
+                                    <div className="d-flex align-items-start mb-4">
+                                        <i className="bi bi-envelope text-danger fs-4 me-3"></i>
                                         <div>
-                                            <h3>Call Us</h3>
-                                            <p>+91 8949895079</p>
+                                            <h5 className="fw-bold mb-1">Email</h5>
+                                            <p className="text-muted small mb-0 text-break">sainiaarti743@gmail.com</p>
                                         </div>
                                     </div>
-
-                                    <div className="info-item d-flex" data-aos="fade-up" data-aos-delay="400">
-                                        <i className="bi bi-envelope flex-shrink-0"></i>
-                                        <div>
-                                            <h3>Email Us</h3>
-                                            <p>sainiaarti743@gmail.com</p>
-                                        </div>
-                                    </div>
-                                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14166.60600904393!2d75.81799496542365!3d27.41779977159335!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396d1b711f002ea9%3A0x827f6cf21ed660c0!2sAjeetgarh%2C%20Rajasthan%20332701!5e0!3m2!1sen!2sin!4v1772097715493!5m2!1sen!2sin" style={{ border: '0', width: '100%', height: '270px' }} allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-
+                                    <iframe
+                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14166.60600904393!2d75.81799496542365!3d27.41779977159335!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396d1b711f002ea9%3A0x827f6cf21ed660c0!2sAjeetgarh%2C%20Rajasthan%20332701!5e0!3m2!1sen!2sin!4v1772097715493!5m2!1sen!2sin"
+                                        style={{ border: '0', width: '100%', height: '200px', borderRadius: '8px' }}
+                                        allowFullScreen=""
+                                        loading="lazy"
+                                        referrerPolicy="no-referrer-when-downgrade"
+                                        title="Google Map"
+                                    ></iframe>
                                 </div>
                             </div>
-
-                            <div className="col-lg-7">
-                                <form action="forms/contact.php" method="post" className="php-email-form" data-aos="fade-up" data-aos-delay="200">
-                                    <div className="row gy-4">
-
-                                        <div className="col-md-6">
-                                            <label for="name-field" className="pb-2">Your Name</label>
-                                            <input type="text" name="name" id="name-field" className="form-control" required="" />
+                            <div className="col-lg-7 px-2">
+                                <div className="p-4 bg-white rounded shadow-sm h-100">
+                                    {/* Form me ref aur names add kiye hain */}
+                                    <form ref={formRef} onSubmit={sendEmail} className="row g-3 m-0">
+                                        <div className="col-md-6 p-1">
+                                            <label htmlFor="name-field" className="form-label small fw-semibold text-secondary">Your Name</label>
+                                            <input type="text" name="from_name" id="name-field" className="form-control" required />
                                         </div>
-
-                                        <div className="col-md-6">
-                                            <label for="email-field" className="pb-2">Your Email</label>
-                                            <input type="email" className="form-control" name="email" id="email-field" required="" />
+                                        <div className="col-md-6 p-1">
+                                            <label htmlFor="email-field" className="form-label small fw-semibold text-secondary">Your Email</label>
+                                            <input type="email" name="from_email" id="email-field" className="form-control" required />
                                         </div>
-
-                                        <div className="col-md-12">
-                                            <label for="subject-field" className="pb-2">Subject</label>
-                                            <input type="text" className="form-control" name="subject" id="subject-field" required="" />
+                                        <div className="col-12 p-1">
+                                            <label htmlFor="subject-field" className="form-label small fw-semibold text-secondary">Subject</label>
+                                            <input type="text" name="subject" id="subject-field" className="form-control" required />
                                         </div>
-
-                                        <div className="col-md-12">
-                                            <label for="message-field" className="pb-2">Message</label>
-                                            <textarea className="form-control" name="message" rows="10" id="message-field" required=""></textarea>
+                                        <div className="col-12 p-1">
+                                            <label htmlFor="message-field" className="form-label small fw-semibold text-secondary">Message</label>
+                                            <textarea name="message" id="message-field" className="form-control" rows="4" required></textarea>
                                         </div>
-
-                                        <div className="col-md-12 text-center">
-                                            <div className="loading">Loading</div>
-                                            <div className="error-message"></div>
-                                            <div className="sent-message">Your message has been sent. Thank you!</div>
-
-                                            <button type="submit">Send Message</button>
+                                        <div className="col-12 p-1 text-center mt-3">
+                                            <button type="submit" className="btn btn-danger w-100 py-2 fw-semibold shadow-sm">Send Message</button>
                                         </div>
-
-                                    </div>
-                                </form>
+                                    </form>
+                                </div>
                             </div>
-
                         </div>
-
                     </div>
-
                 </section>
-
-
-
-
-
-
-
             </main>
-
-
-            <footer id="footer" className="footer position-relative bg-dark text-white py-4">
-
-                <div className="container text-center">
-
-                    {/* Name */}
-                    <h4 className="fw-bold text-white">Aarti Saini</h4>
-                    <p className="mb-3">Frontend Developer | React Developer</p>
-
-                    {/* Social Links */}
-                    <div className="mb-3">
-                        <a href="#" className="text-white mx-2 fs-4">
-                            <i className="bi bi-linkedin"></i>
-                        </a>
-                        <a href="#" className="text-white mx-2 fs-4">
-                            <i className="bi bi-github"></i>
-                        </a>
-                        <a href="#" className="text-white mx-2 fs-4">
-                            <i className="bi bi-instagram"></i>
-                        </a>
-                        <a href="mailto:yourmail@gmail.com" className="text-white mx-2 fs-4">
-                            <i className="bi bi-envelope"></i>
-                        </a>
-                    </div>
-
-                    {/* Copyright */}
-                    <div className="small">
-                        © {new Date().getFullYear()} Aarti Saini. All Rights Reserved.
-                    </div>
-
-                </div>
-
-            </footer>
-            {/* <!-- Scroll Top --> */}
-            <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-            {/* <!-- Preloader --> */}
-            {/* <div id="preloader"></div> */}
-
-
-        </>
-
-    )
+        </div>
+    );
 }
