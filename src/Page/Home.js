@@ -98,8 +98,8 @@ export default function Home() {
                     >
                         <i className="bi bi-telegram"></i>
                     </a>
-                    <a href="#" className="facebook mx-1 text-white opacity-75"><i className="bi bi-facebook"></i></a>
-                    <a href="#" className="instagram mx-1 text-white opacity-75"><i className="bi bi-instagram"></i></a>
+                    <a href="/" className="facebook mx-1 text-white opacity-75"><i className="bi bi-facebook"></i></a>
+                    <a href="/" className="instagram mx-1 text-white opacity-75"><i className="bi bi-instagram"></i></a>
                     <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="linkedin mx-1 text-white opacity-75"><i className="bi bi-linkedin"></i></a>
                 </div>
 
